@@ -84,7 +84,7 @@ app.post("/login", async(req, res) => {
             })
         }
         //if email and password in incorrect
-        res.sendStatus(400).send("email and password id incorrect")
+        res.sendStatus(400).send("email and password id incorrec")
     } catch (error) {
         console.log(error);
     }

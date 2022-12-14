@@ -89,3 +89,9 @@ app.post("/login", async(req, res) => {
         console.log(error);
     }
 })
+
+app.get("/dashboard", auth, (req, res) => {
+    res.send("welcome to dashboard")
+})
+
+module.exports = app;

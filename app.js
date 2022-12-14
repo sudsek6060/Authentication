@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 var cookieParser = require("cookie-parser")
 
+//middleware
+const auth = require("./middleware/auth")
+
 //import model - user
 const User = require("./model/user")
 

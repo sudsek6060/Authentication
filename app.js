@@ -52,3 +52,40 @@ app.post("/register", async(req, res) => {
         console.log("Error is response route");
     }
 })
+
+app.post("/login", async(req, res) => {
+    try {
+        //collect information from frontend
+        const {email, password} = req.body
+
+        //Validate
+        if (!(email && password)) {
+            res.status(401).send("Email and Oassword is required")
+        }
+        
+        //check user in database
+        const newUser = await User.findOne({email})
+
+        //match the password
+        if (newUser && (await bcrypt.compare(password, newUser.password))) {
+            const token = jwt.sign({id: newUser._id, email}, process.env.SECRET, 
+                {expiresIn: "2h"})
+            newUser.password = undefined
+            newUser.token = token
+
+            const options = {
+                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                httpOnly : true
+            }
+            //send token
+            res.status(200).cookie("token", token, options).json({
+                success: true,
+                token, newUser
+            })
+        }
+        //if email and password in incorrect
+        res.sendStatus(400).send("email and password id incorrect")
+    } catch (error) {
+        console.log(error);
+    }
+})
